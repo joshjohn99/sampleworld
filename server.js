@@ -3,7 +3,7 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const Anthropic = require('@anthropic-ai/sdk').default;
-const pdfParse = require('pdf-parse');
+const { PDFParse } = require('pdf-parse');
 const cheerio = require('cheerio');
 
 const app = express();
@@ -23,6 +23,8 @@ const upload = multer({
 
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static('public'));
+
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 const SYSTEM_PROMPT = fs.readFileSync(
   path.join(__dirname, 'research_tutor_system_prompt.txt'),
@@ -58,9 +60,11 @@ async function extractTextFromUrl(url) {
   const contentType = res.headers.get('content-type') || '';
 
   if (contentType.includes('application/pdf')) {
-    const buffer = Buffer.from(await res.arrayBuffer());
-    const pdf = await pdfParse(buffer);
-    return pdf.text;
+    const buffer = await res.arrayBuffer();
+    const parser = new PDFParse({ data: new Uint8Array(buffer) });
+    const result = await parser.getText();
+    await parser.destroy();
+    return result.text;
   }
 
   const html = await res.text();
@@ -87,8 +91,10 @@ async function extractTextFromUrl(url) {
 
 async function extractTextFromPdf(filePath) {
   const buffer = fs.readFileSync(filePath);
-  const pdf = await pdfParse(buffer);
-  return pdf.text;
+  const parser = new PDFParse({ data: new Uint8Array(buffer) });
+  const result = await parser.getText();
+  await parser.destroy();
+  return result.text;
 }
 
 app.post('/api/analyze/url', async (req, res) => {

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Tutor — AI Security Paper Analyzer</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Research Tutor</h1>
+      <p class="subtitle">AI Security Research Paper Analyzer</p>
+      <nav class="header-nav">
+        <button class="nav-btn active" data-view="analyze">Analyze</button>
+        <button class="nav-btn" data-view="library">Library</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- ANALYZE VIEW -->
+      <section id="view-analyze" class="view active">
+        <div class="input-panel">
+          <div class="input-tabs">
+            <button class="input-tab active" data-input="url">Paste URL</button>
+            <button class="input-tab" data-input="pdf">Upload PDF</button>
+          </div>
+
+          <div class="input-content" id="input-url">
+            <input type="url" id="url-input" placeholder="https://arxiv.org/abs/... or any article URL" autocomplete="off">
+          </div>
+
+          <div class="input-content hidden" id="input-pdf">
+            <label class="file-drop" id="file-drop">
+              <input type="file" id="pdf-input" accept="application/pdf" hidden>
+              <span class="file-drop-text">Drop a PDF here or click to browse</span>
+              <span class="file-drop-name hidden" id="file-name"></span>
+            </label>
+          </div>
+
+          <button id="analyze-btn" class="primary-btn">Analyze Paper</button>
+        </div>
+
+        <!-- PROGRESS INDICATOR -->
+        <div class="progress-panel hidden" id="progress-panel">
+          <div class="progress-steps">
+            <div class="step-indicator" data-step="1"><span class="step-num">1</span> Summary</div>
+            <div class="step-indicator" data-step="2"><span class="step-num">2</span> Concepts</div>
+            <div class="step-indicator" data-step="3"><span class="step-num">3</span> ATLAS</div>
+            <div class="step-indicator" data-step="4"><span class="step-num">4</span> Off/Def</div>
+            <div class="step-indicator" data-step="5"><span class="step-num">5</span> Threats</div>
+            <div class="step-indicator" data-step="6"><span class="step-num">6</span> Quiz</div>
+            <div class="step-indicator" data-step="7"><span class="step-num">7</span> Next</div>
+          </div>
+        </div>
+
+        <!-- STREAMING OUTPUT -->
+        <div class="stream-panel hidden" id="stream-panel">
+          <div class="stream-content" id="stream-content"></div>
+        </div>
+
+        <!-- TABBED RESULTS -->
+        <div class="results-panel hidden" id="results-panel">
+          <div class="results-tabs" id="results-tabs"></div>
+          <div class="results-content" id="results-content"></div>
+          <div class="results-actions">
+            <button id="export-btn" class="secondary-btn">Export to Markdown</button>
+            <button id="new-analysis-btn" class="secondary-btn">New Analysis</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LIBRARY VIEW -->
+      <section id="view-library" class="view hidden">
+        <div class="library-search">
+          <input type="text" id="library-search" placeholder="Search past analyses...">
+        </div>
+        <div class="library-list" id="library-list">
+          <p class="empty-state">No analyses saved yet. Analyze a paper to get started.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
